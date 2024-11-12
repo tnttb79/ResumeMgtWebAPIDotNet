@@ -5,6 +5,7 @@ using backend.Core.Dtos.CompanyDTOs;
 using backend.Core.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
@@ -24,11 +25,12 @@ namespace backend.Controllers
         // Create
         [HttpPost]
         [Route("Create")]
-        public async Task<ActionResult<CompanyGetDTO>> CreateCompany(CompanyCreateDTO newCompany)
+        public async Task<ActionResult<CompanyGetDTO>> CreateCompany([FromBody] CompanyCreateDTO newCompany)
         {
-            if (newCompany == null || !ModelState.IsValid)
+            Company? existingCompany = await _context.Companies.FirstOrDefaultAsync(company => company.Name == newCompany.Name);
+            if (existingCompany != null)
             {
-                return BadRequest("Invalid input for new comapny");
+                return Conflict($"A company with the name: '{newCompany.Name}' is already exist");
             }
             var company = _mapper.Map<Company>(newCompany);
             await _context.Companies.AddAsync(company);
