@@ -35,7 +35,7 @@ namespace backend.Controllers
             var company = _mapper.Map<Company>(newCompany);
             await _context.Companies.AddAsync(company);
             await _context.SaveChangesAsync();
-            return CreatedAtAction("GetCompany", new { id = company.ID }, _mapper.Map<CompanyGetDTO>(company));
+            return CreatedAtAction("GetCompanyById", new { id = company.ID }, _mapper.Map<CompanyGetDTO>(company));
         }
         // Read
         [HttpGet]
@@ -45,7 +45,17 @@ namespace backend.Controllers
             List<CompanyGetDTO> companiesDTO = _mapper.Map<List<CompanyGetDTO>>(companies);
             return Ok(companiesDTO);
         }
-        //public async Task<ActionResult<Companyget>>
+        [HttpGet]
+        [Route("{id}")]
+        public async Task<ActionResult<CompanyGetDTO>> GetCompanyById(long id)
+        {
+            Company? company = await _context.Companies.FindAsync(id);
+            if (company == null)
+            {
+                return NotFound($"Company with ID: {id} not found");
+            }
+            return Ok(_mapper.Map<CompanyGetDTO>(company));
+        }
         // Update
 
         // Delete
