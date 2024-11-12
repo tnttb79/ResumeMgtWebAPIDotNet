@@ -6,6 +6,7 @@ using backend.Core.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace backend.Controllers
 {
@@ -24,7 +25,6 @@ namespace backend.Controllers
 
         // Create
         [HttpPost]
-        [Route("Create")]
         public async Task<ActionResult<CompanyGetDTO>> CreateCompany([FromBody] CompanyCreateDTO newCompany)
         {
             Company? existingCompany = await _context.Companies.FirstOrDefaultAsync(company => company.Name == newCompany.Name);
@@ -38,7 +38,13 @@ namespace backend.Controllers
             return CreatedAtAction("GetCompany", new { id = company.ID }, _mapper.Map<CompanyGetDTO>(company));
         }
         // Read
-        // get all companies
+        [HttpGet]
+        public async Task<ActionResult<List<CompanyGetDTO>>> GetAllCompanies()
+        {
+            List<Company> companies = await _context.Companies.ToListAsync();
+            List<CompanyGetDTO> companiesDTO = _mapper.Map<List<CompanyGetDTO>>(companies);
+            return Ok(companiesDTO);
+        }
         //public async Task<ActionResult<Companyget>>
         // Update
 
