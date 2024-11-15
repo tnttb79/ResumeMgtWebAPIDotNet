@@ -10,10 +10,13 @@ builder.Services.AddDbContext<ApplicationDBContext>(opt => opt.UseSqlServer(buil
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 // Add JsonStringEnumConverter
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-});
+// Ignore cycles in JSON serialization
+builder.Services.AddControllers()
+      .AddJsonOptions(options =>
+      {
+          options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+          options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+      });
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
