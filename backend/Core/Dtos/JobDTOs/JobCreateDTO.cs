@@ -9,7 +9,6 @@ namespace backend.Core.Dtos.JobDTOs
         public string Title { get; set; }
         [Required]
         public JobLevel JobLevel { get; set; }
-        [Required(ErrorMessage ="hey you need to input companyID you dumb ass")]
         public long? CompanyId { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace backend.Controllers
             {
                 return Conflict($"A company with the name: '{newCompany.Name}' is already exist");
             }
-            var company = _mapper.Map<Company>(newCompany);
+            var company = _mapper.Map<Company>(newCompany);      
             await _context.Companies.AddAsync(company);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetCompanyById", new { id = company.ID }, _mapper.Map<CompanyGetDTO>(company));
