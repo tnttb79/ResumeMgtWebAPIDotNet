@@ -1,6 +1,4 @@
-﻿// create a new controller for candidates
-
-using AutoMapper;
+﻿using AutoMapper;
 using backend.Core.Context;
 using backend.Core.Dtos.CandidateDTOs;
 using backend.Core.Entities;
@@ -9,6 +7,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace backend.Controllers
 {
+    /// <summary>
+    /// Controller for managing candidates and their related operations.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     public class CandidateController : ControllerBase
@@ -30,7 +31,11 @@ namespace backend.Controllers
         }
         // CRUD
 
-        // Create
+        /// <summary>
+        /// Create a new candidate and upload resume.
+        /// </summary>
+        /// <param name="newCandidate">Candidate information and resume file.</param>
+        /// <returns>Returns the created candidate's details.</returns>
         [HttpPost]
         public async Task<ActionResult<CandidateGetDTO>> CreateCandidate([FromForm] CandidateCreateDTO newCandidate)
         {
@@ -60,10 +65,11 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetCandidateById), new { id = newCandidateEntity.ID }, _mapper.Map<CandidateGetDTO>(newCandidateEntity));
         }
 
+        /// <summary>
+        /// Helper method to save the uploaded file.
+        /// </summary>
         private async Task<string> SaveFile(IFormFile file)
         {
-            // I want to check if the file is a pdf and length < 5MB then save it, also indicate if there is an error to the user if one of the conditions is not met
-            
             string fileName = $"{Guid.NewGuid()}_{file.FileName}";
             string filePath = Path.Combine(_uploadsFolder, fileName);
             using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
@@ -73,14 +79,29 @@ namespace backend.Controllers
             return filePath;
 
         }
-        //// Read
-        //[HttpGet]
-        //public async Task<ActionResult<List<CandidateGetDTO>>> GetAllCandidates()
-        //{
-        //    List<Candidate> candidates = await _context.Candidates.ToListAsync();
-        //    List<CandidateGetDTO> candidatesDTO = _mapper.Map<List<CandidateGetDTO>>(candidates);
-        //    return Ok(candidatesDTO);
-        //}
+
+        /// <summary>
+        /// Get all candidates associated with a specific job.
+        /// </summary>
+        /// <param name="jobId">Job ID.</param>
+        /// <returns>List of candidates related to the specified job.</returns>
+        [HttpGet("job/{jobId}")]
+        public async Task<ActionResult<List<CandidateGetDTO>>> GetAllCandidatesByJobId(long jobId)
+        {
+            List<Candidate> candidates = await _context.Candidates.Include(candidate => candidate.Job).Where(candidate => candidate.JobId == jobId).ToListAsync();
+            if (candidates.Count == 0)
+            {
+                return NotFound($"No candidates found for job with ID: {jobId}");
+            }
+            List<CandidateGetDTO> candidatesDTO = _mapper.Map<List<CandidateGetDTO>>(candidates);
+            return Ok(candidatesDTO);
+        }
+
+        /// <summary>
+        /// Get a candidate by their ID.
+        /// </summary>
+        /// <param name="id">Candidate ID.</param>
+        /// <returns>Returns the candidate details.</returns>
         [HttpGet]
         [Route("{id}")]
         public async Task<ActionResult<CandidateGetDTO>> GetCandidateById(long id)
@@ -93,7 +114,11 @@ namespace backend.Controllers
             return Ok(_mapper.Map<CandidateGetDTO>(candidate));
         }
 
-        // Download File by candidate ID
+        /// <summary>
+        /// Download the resume file of a candidate by their ID.
+        /// </summary>
+        /// <param name="id">Candidate ID.</param>
+        /// <returns>The candidate's resume as a file download.</returns>
         [HttpGet("download/{id}")]
         public async Task<IActionResult> Download(long id)
         {
@@ -103,7 +128,7 @@ namespace backend.Controllers
                 return NotFound($"File for candidate with ID: {id} not found");
             }
             string filePath = existingCandidate.ResumeUrl;
-            
+
             if (!System.IO.File.Exists(filePath))
             {
                 return NotFound($"File for candidate with ID: {id} not found");
@@ -115,7 +140,6 @@ namespace backend.Controllers
             string contentType = "application/pdf";
 
             return File(fileBytes, contentType, Path.GetFileName(filePath));
-            // File()
         }
         // Update
 
