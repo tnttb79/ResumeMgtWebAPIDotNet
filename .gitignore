@@ -2,6 +2,4 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/backend/uploads/36cbf7e1-6b7f-451b-8837-bca37ba4df76_Thang_Ta_Resume(WD)_4.pdf
-/backend/uploads/66d71b88-a01a-4d6c-a83e-d5e508a41512_Thang_Ta_Resume(WD)_4.pdf
-/backend/uploads/d373190d-8242-403f-8551-d649ff50c112_Thang_Ta_Resume(WD)_4.pdf
+/backend/uploads/*
