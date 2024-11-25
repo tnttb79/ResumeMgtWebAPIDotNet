@@ -1,10 +1,12 @@
 import "./App.css";
+import ThemeProvider from "./context/theme.context";
+import TestComponent from "./components/TestComponent";
 
 function App() {
   return (
-    <>
-      <div className='thang'>Hello Thang</div>
-    </>
+    <ThemeProvider>
+      <TestComponent />
+    </ThemeProvider>
   );
 }
 
