@@ -1,13 +1,24 @@
 import "./App.css";
-import ThemeProvider from "./context/theme.context";
-import TestComponent from "./components/TestComponent";
+import "./styles/global.scss";
+import { useTheme } from "./context/theme.context";
+import NavBar from "./components/NavBar/NavBar";
+import { Route, Routes } from "react-router";
+import Company from "./Pages/Company";
+import Job from "./Pages/Job";
+import Candidate from "./Pages/Candidate";
 
-function App() {
+const App: React.FC = () => {
+  const { isDarkMode } = useTheme();
   return (
-    <ThemeProvider>
-      <TestComponent />
-    </ThemeProvider>
+    <div className={`app ${isDarkMode ? "darkMode" : ""}`}>
+      <NavBar />
+      <Routes>
+        <Route path='/Company' element={<Company />} />
+        <Route path='/Job' element={<Job />} />
+        <Route path='/Candidate' element={<Candidate />} />
+      </Routes>
+    </div>
   );
-}
+};
 
 export default App;
