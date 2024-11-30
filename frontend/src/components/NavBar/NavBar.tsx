@@ -1,6 +1,8 @@
 import React from "react";
 import { Link, NavLink } from "react-router";
 import { useTheme } from "../../context/theme.context";
+import Sun from "../../assets/sun.tsx";
+import Moon from "../../assets/moon.tsx";
 import "./NavBar.scss";
 
 const NavBar: React.FC = () => {
@@ -29,7 +31,7 @@ const NavBar: React.FC = () => {
         </li>
       </ul>
       <button onClick={toggleTheme} className='theme-toggle'>
-        {isDarkMode ? "Light Mode" : "Dark Mode"}
+        {isDarkMode ? <Sun /> : <Moon />}
       </button>
     </nav>
   );
