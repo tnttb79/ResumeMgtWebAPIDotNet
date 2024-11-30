@@ -1,0 +1,36 @@
+:root {
+  // light theme
+  --light-primary-background: #ffffff; //1st
+  --light-primary: #dddddd; // 60%
+  --light-secondary: #9d9d9d; // 30%
+  --light-adjacent: #616161; // 10%
+  --light-primary-text: #111111;
+  --light-secondary-text: rgb(223, 223, 223);
+  --light-shadow: rgba(0, 0, 0, 0.598);
+  // dark theme
+  --dark-primary-background: #111111; //1st
+  --dark-primary: #616161; //60%
+  --dark-secondary: #9d9d9d; //30%
+  --dark-adjacent: #aca7cb; //10%
+  --dark-primary-text: rgb(223, 223, 223);
+  --dark-secondary-text: #111111;
+  --dark-shadow: rgba(0, 0, 0, 0.73);
+  //global varaiables
+  --primary-color: var(--light-primary);
+  --secondary-color: var(--light-secondary);
+  --adjacent-color: var(--light-adjacent);
+  --primary-bg: var(--light-primary-background);
+  --primary-text: var(--light-primary-text);
+  --secondary-text: var(--light-secondary-text);
+  --shadow-color: var(--light-shadow);
+}
+
+.darkMode {
+  --primary-color: var(--dark-primary);
+  --secondary-color: var(--dark-secondary);
+  --adjacent-color: var(--dark-adjacent);
+  --primary-bg: var(--dark-primary-background);
+  --primary-text: var(--dark-primary-text);
+  --secondary-text: var(--dark-secondary-text);
+  --shadow-color: var(--dark-shadow);
+}
