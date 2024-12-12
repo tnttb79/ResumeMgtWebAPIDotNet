@@ -5,7 +5,16 @@ using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
+// Config cor to allow local frontend origins
+var AllowLocalFrontendOrigins = "_allowLocalFrontendOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowLocalFrontendOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod();
+                      });
+});
 // Add DB config to the application
 builder.Services.AddDbContext<ApplicationDBContext>(opt => opt.UseSqlServer(builder.Configuration.GetConnectionString("localhost")));
 // Add AutoMapper
@@ -21,6 +30,8 @@ builder.Services.AddControllers()
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
+
+// Config swagger to accept descriptions from XML comments
 builder.Services.AddSwaggerGen(options =>
 {
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -37,6 +48,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(AllowLocalFrontendOrigins);
 
 app.UseAuthorization();
 
