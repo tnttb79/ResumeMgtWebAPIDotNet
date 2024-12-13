@@ -7,6 +7,8 @@
   --light-primary-text: #111111;
   --light-secondary-text: rgb(223, 223, 223);
   --light-shadow: rgba(0, 0, 0, 0.598);
+  --light-hover: #cccccc;
+
   // dark theme
   --dark-primary-background: #111111; //1st
   --dark-primary: #616161; //60%
@@ -15,6 +17,8 @@
   --dark-primary-text: rgb(223, 223, 223);
   --dark-secondary-text: #111111;
   --dark-shadow: rgba(0, 0, 0, 0.73);
+  --dark-hover: #757575;
+
   //global varaiables
   --primary-color: var(--light-primary);
   --secondary-color: var(--light-secondary);
@@ -23,6 +27,7 @@
   --primary-text: var(--light-primary-text);
   --secondary-text: var(--light-secondary-text);
   --shadow-color: var(--light-shadow);
+  --hover-color: var(--light-hover);
 }
 
 .darkMode {
@@ -33,4 +38,5 @@
   --primary-text: var(--dark-primary-text);
   --secondary-text: var(--dark-secondary-text);
   --shadow-color: var(--dark-shadow);
+  --hover-color: var(--dark-hover);
 }
