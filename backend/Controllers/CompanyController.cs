@@ -41,7 +41,7 @@ namespace backend.Controllers
         [HttpGet]
         public async Task<ActionResult<List<CompanyGetDTO>>> GetAllCompanies()
         {
-            List<Company> companies = await _context.Companies.ToListAsync();
+            List<Company> companies = await _context.Companies.Include(company => company.Jobs).ToListAsync();
             List<CompanyGetDTO> companiesDTO = _mapper.Map<List<CompanyGetDTO>>(companies);
             return Ok(companiesDTO);
         }
