@@ -22,7 +22,6 @@ namespace backend.Controllers
             _mapper = mapper;
         }
         // CRUD
-
         // Create
         [HttpPost]
         public async Task<ActionResult<CompanyGetDTO>> CreateCompany([FromBody] CompanyCreateDTO newCompany)

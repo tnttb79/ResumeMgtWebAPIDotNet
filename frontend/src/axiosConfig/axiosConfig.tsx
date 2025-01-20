@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "https://localhost:44344",
+  baseURL: "http://localhost:8080",
+  // baseURL: "https://host.docker.internal:32769",
   headers: {
     "Content-Type": "application/json",
     Accept: "text/plain",

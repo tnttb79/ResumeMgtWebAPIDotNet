@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=ThangTa19@
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+
+  api:
+    build:
+      context: ./backend
+      # dockerfile: Dockerfile # for production
+      dockerfile: Dockerfile.dev # for development
+    volumes:
+      - ./backend:/app # for development
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings__localhost=Server=db,1433;Database=RSMApp;User Id=sa;Password=ThangTa19@;Encrypt=false
+      - ASPNETCORE_URLS=http://+:8080 # for development
+      - ASPNETCORE_ENVIRONMENT=Development # for development
+
+  web:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:5173"
+    depends_on:
+      - api
+    develop:
+      watch:
+        - path: ./frontend/package.json
+          action: rebuild
+        - path: ./frontend/package-lock.json
+          action: rebuild
+        - path: ./frontend
+          target: /app
+          action: sync
+
+volumes:
+  sqlserver_data:

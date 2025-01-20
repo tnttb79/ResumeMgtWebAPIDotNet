@@ -1,0 +1,23 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0
+
+WORKDIR /app
+EXPOSE 8080
+EXPOSE 8081
+
+# Install debugger and EF tools
+RUN apt-get update \
+    && apt-get install -y unzip \
+    && curl -sSL https://aka.ms/getvsdbgsh | /bin/sh /dev/stdin -v latest -l /vsdbg \
+    && dotnet tool install --global dotnet-ef
+ENV PATH="${PATH}:/root/.dotnet/tools"
+
+
+# Enable debug symbols
+ENV ASPNETCORE_ENVIRONMENT=Development
+ENV DOTNET_USE_POLLING_FILE_WATCHER=1
+
+ENTRYPOINT ["bash", "-c", "\
+    sleep 10 && \
+    dotnet ef database update && \
+    dotnet watch --no-hot-reload run --configuration Debug --urls http://+:8080 \
+"]
