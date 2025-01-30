@@ -1,0 +1,90 @@
+:root {
+  // Light theme
+  --primary-bg: #ffffff; // Main background color for the entire app
+  --navbar-bg: #ffffff; // Navigation bar background
+  --card-bg: #ffffff; // Background for card components
+
+  --text-primary: #000000; // Main text color for headings and important content
+  --text-secondary: #374151; // Secondary text for less emphasis
+  --text-disabled: #6b7280; // Disabled text elements
+
+  --accent-color: #000000; // Brand/Primary action color
+  --accent-hover: #1f2937; // Hover state for accent elements
+
+  --button-text: #ffffff; // Text color for primary buttons
+  --button-secondary-bg: #f3f4f6; // Background for secondary buttons
+  --button-secondary-hover: #e5e7eb; // Hover state for secondary buttons
+  --button-disabled: #e5e7eb; // Disabled button state
+
+  --border-color: #e5e7eb; // Border color for containers and dividers
+  --shadow-color: rgba(0, 0, 0, 0.1); // Shadow color for elevation
+  --modal-overlay: rgba(0, 0, 0, 0.5); // Overlay for modals
+
+  --hover-bg: rgba(0, 0, 0, 0.05); // Subtle hover effect background
+  --active-bg: rgba(0, 0, 0, 0.1); // Active/pressed state background
+  --placeholder-text: #6b7280; // Placeholder text in inputs
+  --input-text: #000000; // Text color for input fields
+
+  // Theme toggle specific colors
+  --theme-toggle-bg: #000000; // Theme toggle button background
+  --theme-toggle-color: #ffffff; // Theme toggle icon color
+  --theme-toggle-hover-bg: #1f2937; // Theme toggle hover state
+
+  // Colors for modal and job view
+  --modal-bg: #ffffff; // Modal background
+  --modal-text: #000000; // Modal text color
+  --modal-input-bg: #f3f4f6; // Modal input background
+  --modal-input-text: #000000; // Modal input text color
+  --modal-input-border: #e5e7eb; // Modal input border
+  --modal-title: #000000; // Modal title color
+
+  // Job view specific colors
+  --job-title: #000000; // Job listing title color
+  --job-text: #000000; // Job description text color
+  --job-card-bg: #ffffff; // Job card background
+}
+
+[data-theme="dark"] {
+  --primary-bg: #000000; // Dark mode main background
+  --navbar-bg: #111827; // Dark mode navbar
+  --card-bg: #1f2937; // Dark mode cards
+
+  --text-primary: #ffffff; // Dark mode main text
+  --text-secondary: #e5e7eb; // Dark mode secondary text
+  --text-disabled: #9ca3af; // Dark mode disabled text
+
+  --accent-color: #ffffff; // Dark mode accent color
+  --accent-hover: #e5e7eb; // Dark mode hover state
+
+  --button-text: #000000;
+  --button-secondary-bg: #374151;
+  --button-secondary-hover: #4b5563;
+  --button-disabled: #4b5563;
+
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --modal-overlay: rgba(0, 0, 0, 0.75);
+
+  --hover-bg: rgba(255, 255, 255, 0.1);
+  --active-bg: rgba(255, 255, 255, 0.15);
+  --placeholder-text: #9ca3af;
+  --input-text: #ffffff;
+
+  // Theme toggle specific colors
+  --theme-toggle-bg: #ffffff;
+  --theme-toggle-color: #000000;
+  --theme-toggle-hover-bg: #e5e7eb;
+
+  // Colors for modal and job view
+  --modal-bg: #1f2937;
+  --modal-text: #ffffff;
+  --modal-input-bg: #374151;
+  --modal-input-text: #ffffff;
+  --modal-input-border: #4b5563;
+  --modal-title: #ffffff;
+
+  // Job view specific colors
+  --job-title: #ffffff;
+  --job-text: #ffffff;
+  --job-card-bg: #1f2937;
+}
