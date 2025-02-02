@@ -1,42 +1,62 @@
 import React, { useEffect, useState } from "react";
 import JobView from "./Components/JobView";
-import { get } from "../../axiosConfig/axiosConfig";
+import { get, post } from "../../axiosConfig/axiosConfig";
 import styles from "./Company.module.scss";
+import { Button } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import CreateCompanyModal from "./Components/CreateCompanyModal";
+import {
+  Company as CompanyType,
+  CreateCompanyRequest,
+} from "../../types/company";
 
-interface Company {
-  id: number;
-  name: string;
-  size: string;
-  jobs: Job[];
-}
-
-interface Job {
-  id: number;
-  title: string;
-  jobLevel: string;
-}
+const recordsPerPage = 5;
 
 const Company: React.FC = () => {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<CompanyType[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedCompany, setSelectedCompany] = useState<Company | null>(null);
-  const recordsPerPage = 5;
+  const [selectedCompany, setSelectedCompany] = useState<CompanyType | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    get<Company[]>("/api/Company")
-      .then((response) => {
-        setCompanies(response.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching companies:", error);
-      });
+    fetchCompanies();
   }, []);
 
-  const handleShowJobs = (companyId: number) => {
-    const company = companies.find((c) => c.id === companyId);
-    if (company) {
-      setSelectedCompany(company);
+  // Function to fetch companies from the API
+  const fetchCompanies = async () => {
+    try {
+      const response = await get<CompanyType[]>("/api/Company");
+      setCompanies(response.data);
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+      // TODO: Add proper error handling/notification
     }
+  };
+
+  // Function to handle company creation
+  const handleCreateCompany = async (companyData: CreateCompanyRequest) => {
+    try {
+      setIsLoading(true);
+
+      await post<CompanyType, CreateCompanyRequest>(
+        "/api/Company",
+        companyData
+      );
+      await fetchCompanies();
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error creating company:", error);
+      // TODO: Add proper error handling/notification
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleShowJobs = (company: CompanyType) => {
+    setSelectedCompany(company);
   };
 
   const handleBack = () => {
@@ -65,22 +85,33 @@ const Company: React.FC = () => {
         <JobView company={selectedCompany} onBack={handleBack} />
       ) : (
         <>
-          <h1>Company</h1>
-          <ul className={""}>
+          <div className={styles.headerContainer}>
+            <h1>Company</h1>
+            <Button
+              className={styles.createButton}
+              variant='contained'
+              startIcon={<AddIcon />}
+              onClick={() => setIsModalOpen(true)}
+            >
+              Create Company
+            </Button>
+          </div>
+
+          <ul className={styles.companyList}>
             {currentCompanies.map((company) => (
-              <li key={company.id} className={""}>
-                <div>
-                  <strong>{company.name}</strong> - {company.size}
+              <li
+                key={company.id}
+                className={styles.companyItem}
+                onClick={() => handleShowJobs(company)}
+              >
+                <div className={styles.companyInfo}>
+                  <strong>{company.name}</strong>
+                  <span> {company.size}</span>
                 </div>
-                <button
-                  onClick={() => handleShowJobs(company.id)}
-                  className={""}
-                >
-                  Show Jobs
-                </button>
               </li>
             ))}
           </ul>
+
           <div className={styles.pagination}>
             <button onClick={handlePreviousPage} disabled={currentPage === 1}>
               Previous
@@ -97,6 +128,13 @@ const Company: React.FC = () => {
           </div>
         </>
       )}
+
+      <CreateCompanyModal
+        isModalOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateCompany}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
