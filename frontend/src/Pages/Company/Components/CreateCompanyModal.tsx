@@ -62,7 +62,7 @@ const CreateCompanyModal: React.FC<CreateCompanyModalProps> = ({
             ))}
           </TextField>
           <div className={styles.actions}>
-            <Button onClick={onClose} disabled={isLoading}>
+            <Button onClick={onClose} loading={isLoading} disabled={isLoading}>
               Cancel
             </Button>
             <Button
@@ -70,6 +70,7 @@ const CreateCompanyModal: React.FC<CreateCompanyModalProps> = ({
               variant='contained'
               color='primary'
               disabled={isLoading}
+              loading={isLoading}
             >
               Create
             </Button>
