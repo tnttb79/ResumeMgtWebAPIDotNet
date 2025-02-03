@@ -21,9 +21,13 @@ const CreateCompanyModal: React.FC<CreateCompanyModalProps> = ({
     size: CompanySize.Small,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(companyData);
+    await onSubmit(companyData);
+    setCompanyData({
+      name: "",
+      size: CompanySize.Small,
+    });
   };
 
   return (
