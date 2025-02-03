@@ -25,8 +25,8 @@ const NavBar: React.FC = () => {
           </NavLink>
         </li>
         <li>
-          <NavLink to='/candidate' className={styles.navLink}>
-            Candidate
+          <NavLink to='/application' className={styles.navLink}>
+            Application
           </NavLink>
         </li>
         <button

@@ -4,7 +4,7 @@ import NavBar from "./components/NavBar/NavBar";
 import { Route, Routes } from "react-router";
 import Company from "./Pages/Company/Company";
 import Job from "./Pages/Job/Job";
-import Candidate from "./Pages/Candidate/Candidate";
+import Application from "./Pages/Application/Application";
 import Home from "./Pages/Home/Home";
 import { ThemeProvider } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationContext";
@@ -18,7 +18,7 @@ const App: React.FC = () => {
           <Route path='/' element={<Home />} />
           <Route path='/Company' element={<Company />} />
           <Route path='/Job' element={<Job />} />
-          <Route path='/Candidate' element={<Candidate />} />
+          <Route path='/Application' element={<Application />} />
         </Routes>
       </NotificationProvider>
     </ThemeProvider>
