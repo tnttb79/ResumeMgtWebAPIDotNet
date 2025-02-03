@@ -9,6 +9,7 @@ import {
   Company as CompanyType,
   CreateCompanyRequest,
 } from "../../types/company";
+import { useNotification } from "../../context/NotificationContext";
 
 const recordsPerPage = 5;
 
@@ -20,10 +21,7 @@ const Company: React.FC = () => {
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
+  const { showNotification } = useNotification();
 
   // Function to fetch companies from the API
   const fetchCompanies = async () => {
@@ -32,28 +30,16 @@ const Company: React.FC = () => {
       setCompanies(response.data);
     } catch (error) {
       console.error("Error fetching companies:", error);
-      // TODO: Add proper error handling/notification
-    }
-  };
-
-  // Function to handle company creation
-  const handleCreateCompany = async (companyData: CreateCompanyRequest) => {
-    try {
-      setIsLoading(true);
-
-      await post<CompanyType, CreateCompanyRequest>(
-        "/api/Company",
-        companyData
+      showNotification(
+        "Failed to fetch companies. Please try again later.",
+        "error"
       );
-      await fetchCompanies();
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error creating company:", error);
-      // TODO: Add proper error handling/notification
-    } finally {
-      setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCompanies();
+  }, []);
 
   const handleShowJobs = (company: CompanyType) => {
     setSelectedCompany(company);
@@ -78,6 +64,21 @@ const Company: React.FC = () => {
     startIndex,
     startIndex + recordsPerPage
   );
+
+  const handleCreateCompany = async (companyData: CreateCompanyRequest) => {
+    try {
+      setIsLoading(true);
+      await post<CompanyType>("/api/Company", companyData);
+      await fetchCompanies();
+      setIsModalOpen(false);
+      showNotification("Company created successfully!", "success");
+    } catch (error) {
+      console.error("Error creating company:", error);
+      showNotification("Failed to create company. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className={styles.container}>
