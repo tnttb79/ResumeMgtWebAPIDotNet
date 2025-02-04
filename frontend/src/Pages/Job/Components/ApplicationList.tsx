@@ -15,13 +15,11 @@ interface ApplicationListProps {
 
 const ApplicationList: React.FC<ApplicationListProps> = ({ job, onBack }) => {
   const [applications, setApplications] = useState<Application[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const { showNotification } = useNotification();
 
   // Function to fetch applications for the job
   const fetchApplications = async () => {
     try {
-      setIsLoading(true);
       const response = await get<Application[]>(`/api/Candidate/job/${job.id}`);
       setApplications(response.data);
     } catch (error) {
@@ -30,21 +28,22 @@ const ApplicationList: React.FC<ApplicationListProps> = ({ job, onBack }) => {
         "Failed to fetch applications. Please try again later.",
         "error"
       );
-    } finally {
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
     fetchApplications();
-  }, [job.id]);
+  }, []);
 
   // Function to handle resume download
   const handleDownloadResume = async (applicationId: number) => {
     try {
-      const response = await get(`/api/Candidate/download/${applicationId}`, {
-        responseType: "blob",
-      });
+      const response = await get<Blob>(
+        `/api/Candidate/download/${applicationId}`,
+        {
+          responseType: "blob",
+        }
+      );
 
       // Create blob link to download
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -76,7 +75,9 @@ const ApplicationList: React.FC<ApplicationListProps> = ({ job, onBack }) => {
         >
           Back to Jobs
         </Button>
-        <h1>Applications for {job.title}</h1>
+        <h1>
+          Applications for {job.title} at {job.companyName}
+        </h1>
       </div>
 
       {applications.length === 0 ? (

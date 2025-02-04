@@ -80,11 +80,6 @@ const Job: React.FC = () => {
     }
   };
 
-  // Function to handle job selection
-  const handleJobClick = (job: JobType) => {
-    setSelectedJob(job);
-  };
-
   // Function to handle going back to job list
   const handleBack = () => {
     setSelectedJob(null);
@@ -113,7 +108,7 @@ const Job: React.FC = () => {
           <div
             key={job.id}
             className={styles.jobCard}
-            onClick={() => handleJobClick(job)}
+            onClick={() => setSelectedJob(job)}
           >
             <div className={styles.jobHeader}>
               <h2>{job.title}</h2>
@@ -124,9 +119,7 @@ const Job: React.FC = () => {
                 {job.jobLevel}
               </span>
             </div>
-            <div className={styles.companyInfo}>
-              <span>Company: {job.companyName}</span>
-            </div>
+            <div className={styles.companyInfo}>Company: {job.companyName}</div>
           </div>
         ))}
       </div>

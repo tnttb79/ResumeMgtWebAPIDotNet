@@ -18,17 +18,14 @@ const CreateJobModal: React.FC<CreateJobModalProps> = ({
   onSubmit,
   isLoading,
 }) => {
-  // State for companies list
   const [companies, setCompanies] = useState<Company[]>([]);
 
-  // Initial form state
   const initialFormState: CreateJobRequest = {
     title: "",
     jobLevel: JobLevel.Intern,
     companyId: 0,
   };
 
-  // Form state
   const [jobData, setJobData] = useState<CreateJobRequest>(initialFormState);
 
   // Fetch companies for the dropdown
@@ -37,7 +34,6 @@ const CreateJobModal: React.FC<CreateJobModalProps> = ({
       try {
         const response = await get<Company[]>("/api/Company");
         setCompanies(response.data);
-        // Set the first company as default if available
         if (response.data.length > 0) {
           setJobData((prev) => ({ ...prev, companyId: response.data[0].id }));
         }
@@ -45,22 +41,13 @@ const CreateJobModal: React.FC<CreateJobModalProps> = ({
         console.error("Error fetching companies:", error);
       }
     };
-
-    if (isModalOpen) {
-      fetchCompanies();
-    }
-  }, [isModalOpen]);
-
-  // Reset form when modal closes
-  useEffect(() => {
-    if (!isModalOpen) {
-      setJobData(initialFormState);
-    }
-  }, [isModalOpen]);
+    fetchCompanies();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await onSubmit(jobData);
+    setJobData(initialFormState);
   };
 
   return (
