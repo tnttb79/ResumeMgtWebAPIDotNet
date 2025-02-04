@@ -34,6 +34,8 @@ const Company: React.FC = () => {
         "Failed to fetch companies. Please try again later.",
         "error"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
