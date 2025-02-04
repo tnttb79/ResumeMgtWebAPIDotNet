@@ -14,10 +14,14 @@ namespace backend.Core.AutoMapperConfig
             CreateMap<Company, CompanyGetDTO>();
 
             CreateMap<JobCreateDTO, Job>();
-            CreateMap<Job, JobGetDTO>().ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.Name));
+            CreateMap<Job, JobGetDTO>()
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.Name));
 
             CreateMap<CandidateCreateDTO, Candidate>();
-            CreateMap<Candidate, CandidateGetDTO>().ForMember(dest => dest.JobName, opt => opt.MapFrom(src => src.Job.Title));
+            CreateMap<Candidate, CandidateGetDTO>()
+                .ForMember(dest => dest.ID, opt => opt.MapFrom(src => src.ID))
+                .ForMember(dest => dest.JobName, opt => opt.MapFrom(src => src.Job.Title))
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Job.Company.Name));
         }
     }
 }
