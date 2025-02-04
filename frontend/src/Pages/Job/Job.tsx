@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { get } from "../../axiosConfig/axiosConfig";
-import { Job as JobType, JobLevel } from "../../types/job";
+import { get, post } from "../../axiosConfig/axiosConfig";
+import { Job as JobType, JobLevel, CreateJobRequest } from "../../types/job";
 import { Button } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useNotification } from "../../context/NotificationContext";
 import styles from "./Job.module.scss";
+import CreateJobModal from "./Components/CreateJobModal";
 
 const recordsPerPage = 5;
 
@@ -61,6 +62,22 @@ const Job: React.FC = () => {
     return colors[level] || "var(--text-secondary)";
   };
 
+  // Function to handle job creation
+  const handleCreateJob = async (jobData: CreateJobRequest) => {
+    try {
+      setIsLoading(true);
+      await post<JobType>("/api/Job", jobData);
+      await fetchJobs(); // Refresh the jobs list
+      setIsModalOpen(false);
+      showNotification("Job created successfully!", "success");
+    } catch (error) {
+      console.error("Error creating job:", error);
+      showNotification("Failed to create job. Please try again.", "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
@@ -107,7 +124,12 @@ const Job: React.FC = () => {
         </button>
       </div>
 
-      {/* TODO: Add CreateJobModal component */}
+      <CreateJobModal
+        isModalOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateJob}
+        isLoading={isLoading}
+      />
     </div>
   );
 };
