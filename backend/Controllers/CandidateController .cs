@@ -141,6 +141,29 @@ namespace backend.Controllers
 
             return File(fileBytes, contentType, Path.GetFileName(filePath));
         }
+
+        /// <summary>
+        /// Get all candidates with their job information.
+        /// </summary>
+        /// <returns>List of all candidates with their job details.</returns>
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<List<CandidateGetDTO>>> GetAllCandidates()
+        {
+            var candidates = await _context.Candidates
+                .Include(c => c.Job)
+                .ThenInclude(j => j.Company)
+                .OrderByDescending(c => c.CreateAt) 
+                .ToListAsync();
+
+            if (!candidates.Any())
+            {
+                return Ok(new List<CandidateGetDTO>());
+            }
+
+            var candidatesDTO = _mapper.Map<List<CandidateGetDTO>>(candidates);
+            return Ok(candidatesDTO);
+        }
+
         // Update
 
         // Delete
