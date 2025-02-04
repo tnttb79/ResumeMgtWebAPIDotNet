@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { useNotification } from "../../context/NotificationContext";
 import styles from "./Job.module.scss";
 import CreateJobModal from "./Components/CreateJobModal";
+import ApplicationList from "./Components/ApplicationList";
 
 const recordsPerPage = 5;
 
@@ -14,6 +15,7 @@ const Job: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState<JobType | null>(null);
   const { showNotification } = useNotification();
 
   const fetchJobs = async () => {
@@ -78,6 +80,20 @@ const Job: React.FC = () => {
     }
   };
 
+  // Function to handle job selection
+  const handleJobClick = (job: JobType) => {
+    setSelectedJob(job);
+  };
+
+  // Function to handle going back to job list
+  const handleBack = () => {
+    setSelectedJob(null);
+  };
+
+  if (selectedJob) {
+    return <ApplicationList job={selectedJob} onBack={handleBack} />;
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
@@ -94,7 +110,11 @@ const Job: React.FC = () => {
 
       <div className={styles.jobList}>
         {currentJobs.map((job) => (
-          <div key={job.id} className={styles.jobCard}>
+          <div
+            key={job.id}
+            className={styles.jobCard}
+            onClick={() => handleJobClick(job)}
+          >
             <div className={styles.jobHeader}>
               <h2>{job.title}</h2>
               <span
