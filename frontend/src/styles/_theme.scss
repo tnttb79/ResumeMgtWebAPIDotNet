@@ -42,8 +42,17 @@
   --job-title: #000000; // Job listing title color
   --job-text: #000000; // Job description text color
   --job-card-bg: #ffffff; // Job card background
-}
 
+  // Job level colors
+  --job-level-intern: #718096;
+  --job-level-junior: #4299e1;
+  --job-level-mid: #38b2ac;
+  --job-level-senior: #805ad5;
+  --job-level-lead: #d69e2e;
+  --job-level-cto: #c53030;
+  --job-level-architect: #2c5282;
+}
+// Dark theme
 [data-theme="dark"] {
   --primary-bg: #000000; // Dark mode main background
   --navbar-bg: #111827; // Dark mode navbar
@@ -87,4 +96,13 @@
   --job-title: #ffffff;
   --job-text: #ffffff;
   --job-card-bg: #1f2937;
+
+  // Job level colors
+  --job-level-intern: #4a5568;
+  --job-level-junior: #2b6cb0;
+  --job-level-mid: #2c7a7b;
+  --job-level-senior: #6b46c1;
+  --job-level-lead: #b7791f;
+  --job-level-cto: #9b2c2c;
+  --job-level-architect: #1a365d;
 }
