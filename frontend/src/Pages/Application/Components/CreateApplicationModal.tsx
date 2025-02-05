@@ -11,7 +11,10 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { get, post } from "../../../axiosConfig/axiosConfig";
-import { CreateApplicationRequest } from "../../../types/application";
+import {
+  CreateApplicationRequest,
+  CandidateResponse,
+} from "../../../types/application";
 import { Job } from "../../../types/job";
 import { useNotification } from "../../../context/NotificationContext";
 import styles from "./CreateApplicationModal.module.scss";
@@ -22,9 +25,18 @@ interface CreateApplicationModalProps {
   onSuccess: () => void;
   isLoading: boolean;
 }
-
+const initialFormState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  coverLetter: "",
+  jobId: 0,
+  resume: null as File | null,
+};
 const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   isModalOpen,
+
   onClose,
   onSuccess,
   isLoading,
@@ -35,15 +47,7 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   const [isError, setIsError] = useState(false);
 
   // Form state
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    coverLetter: "",
-    jobId: 0,
-    resume: null as File | null,
-  });
+  const [formData, setFormData] = useState(initialFormState);
 
   // Fetch jobs for the dropdown
   useEffect(() => {
@@ -73,7 +77,6 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       formDataToSend.append("CoverLetter", formData.coverLetter.trim());
       formDataToSend.append("JobId", formData.jobId.toString());
 
-      // Handle resume file upload
       if (formData.resume instanceof File) {
         formDataToSend.append("Resume", formData.resume);
       } else {
@@ -85,28 +88,18 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
         },
       });
       showNotification("Application submitted successfully!", "success");
+      setFormData(initialFormState);
       onSuccess();
     } catch (error: unknown) {
       console.error("Error submitting application:", error);
-      const errorMessage =
-        error &&
-        typeof error === "object" &&
-        "response" in error &&
-        error.response &&
-        typeof error.response === "object" &&
-        "data" in error.response &&
-        error.response.data &&
-        typeof error.response.data === "object" &&
-        "message" in error.response.data
-          ? (error.response.data.message as string)
-          : error instanceof Error
-          ? error.message
-          : "Failed to submit application. Please try again.";
-      showNotification(errorMessage, "error");
+      showNotification(
+        "Failed to submit application. Please try again.",
+        "error"
+      );
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     // Validate file type
@@ -119,7 +112,6 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       showNotification("File size should be less than 5MB", "error");
       return;
     }
-    // Store the file object directly
     setFormData((prev) => ({
       ...prev,
       resume: file,
@@ -233,7 +225,7 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             <InputLabel shrink>Resume (PDF only, max 5MB)</InputLabel>
             <Input
               type='file'
-              onChange={handleFileChange}
+              onChange={handleFileUpload}
               required
               inputProps={{
                 accept: "application/pdf",
