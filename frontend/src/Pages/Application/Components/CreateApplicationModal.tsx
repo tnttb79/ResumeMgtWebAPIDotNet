@@ -21,6 +21,7 @@ interface CreateApplicationModalProps {
   onSuccess: () => void;
   isLoading: boolean;
 }
+
 const initialFormState = {
   firstName: "",
   lastName: "",
@@ -30,20 +31,33 @@ const initialFormState = {
   jobId: 0,
   resume: null as File | null,
 };
+
+// Track which fields have been touched/interacted with
+const initialTouchedState = {
+  firstName: false,
+  lastName: false,
+  email: false,
+  phone: false,
+  coverLetter: false,
+  jobId: false,
+  resume: false,
+};
+
 const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
   isModalOpen,
-
   onClose,
   onSuccess,
   isLoading,
 }) => {
-  // State for jobs list
   const [jobs, setJobs] = useState<Job[]>([]);
   const { showNotification } = useNotification();
-  const [isError, setIsError] = useState(false);
-
-  // Form state
   const [formData, setFormData] = useState(initialFormState);
+  const [touched, setTouched] = useState(initialTouchedState);
+
+  // Handle field blur (when user leaves a field)
+  const handleBlur = (field: keyof typeof initialTouchedState) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   // Fetch jobs for the dropdown
   useEffect(() => {
@@ -85,6 +99,7 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
       });
       showNotification("Application submitted successfully!", "success");
       setFormData(initialFormState);
+      setTouched(initialTouchedState);
       onSuccess();
     } catch (error: unknown) {
       console.error("Error submitting application:", error);
@@ -125,11 +140,15 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             onChange={(e) =>
               setFormData({ ...formData, firstName: e.target.value })
             }
+            onBlur={() => handleBlur("firstName")}
             fullWidth
             required
-            error={isError}
-            onBlur={() => setIsError(formData.firstName.trim() === "")}
-            helperText={isError ? "First Name is required" : ""}
+            error={touched.firstName && formData.firstName.trim() === ""}
+            helperText={
+              touched.firstName && formData.firstName.trim() === ""
+                ? "First Name is required"
+                : ""
+            }
             margin='normal'
           />
 
@@ -139,11 +158,14 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             onChange={(e) =>
               setFormData({ ...formData, lastName: e.target.value })
             }
+            onBlur={() => handleBlur("lastName")}
             fullWidth
             required
-            error={formData.lastName.trim() === ""}
+            error={touched.lastName && formData.lastName.trim() === ""}
             helperText={
-              formData.lastName.trim() === "" ? "Last Name is required" : ""
+              touched.lastName && formData.lastName.trim() === ""
+                ? "Last Name is required"
+                : ""
             }
             margin='normal'
           />
@@ -155,10 +177,15 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
             }
+            onBlur={() => handleBlur("email")}
             fullWidth
             required
-            error={formData.email.trim() === ""}
-            helperText={formData.email.trim() === "" ? "Email is required" : ""}
+            error={touched.email && formData.email.trim() === ""}
+            helperText={
+              touched.email && formData.email.trim() === ""
+                ? "Email is required"
+                : ""
+            }
             margin='normal'
           />
 
@@ -168,10 +195,15 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             onChange={(e) =>
               setFormData({ ...formData, phone: e.target.value })
             }
+            onBlur={() => handleBlur("phone")}
             fullWidth
             required
-            error={formData.phone.trim() === ""}
-            helperText={formData.phone.trim() === "" ? "Phone is required" : ""}
+            error={touched.phone && formData.phone.trim() === ""}
+            helperText={
+              touched.phone && formData.phone.trim() === ""
+                ? "Phone is required"
+                : ""
+            }
             margin='normal'
           />
 
@@ -185,10 +217,13 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
                 jobId: Number(e.target.value),
               })
             }
+            onBlur={() => handleBlur("jobId")}
             fullWidth
             required
-            error={formData.jobId === 0}
-            helperText={formData.jobId === 0 ? "Please select a job" : ""}
+            error={touched.jobId && formData.jobId === 0}
+            helperText={
+              touched.jobId && formData.jobId === 0 ? "Please select a job" : ""
+            }
             margin='normal'
           >
             {jobs.map((job) => (
@@ -204,11 +239,12 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             onChange={(e) =>
               setFormData({ ...formData, coverLetter: e.target.value })
             }
+            onBlur={() => handleBlur("coverLetter")}
             fullWidth
             required
-            error={formData.coverLetter.trim() === ""}
+            error={touched.coverLetter && formData.coverLetter.trim() === ""}
             helperText={
-              formData.coverLetter.trim() === ""
+              touched.coverLetter && formData.coverLetter.trim() === ""
                 ? "Cover Letter is required"
                 : ""
             }
@@ -217,17 +253,22 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             margin='normal'
           />
 
-          <FormControl fullWidth margin='normal' error={!formData.resume}>
+          <FormControl
+            fullWidth
+            margin='normal'
+            error={touched.resume && !formData.resume}
+          >
             <InputLabel shrink>Resume (PDF only, max 5MB)</InputLabel>
             <Input
               type='file'
               onChange={handleFileUpload}
+              onBlur={() => handleBlur("resume")}
               required
               inputProps={{
                 accept: "application/pdf",
               }}
             />
-            {!formData.resume && (
+            {touched.resume && !formData.resume && (
               <FormHelperText>Resume is required</FormHelperText>
             )}
           </FormControl>
