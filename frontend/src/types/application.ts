@@ -1,5 +1,6 @@
 // Interface for application data from API
 export interface Application {
+  id: number;
   firstName: string;
   lastName: string;
   email: string;
@@ -7,6 +8,7 @@ export interface Application {
   coverLetter: string;
   jobName: string;
   jobId: number;
+  companyName: string;
 }
 
 // Interface for creating a new application

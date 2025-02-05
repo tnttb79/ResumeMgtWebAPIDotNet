@@ -1,0 +1,172 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: calc(100vh - 6rem);
+  display: flex;
+  flex-direction: column;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 2rem;
+
+  h1 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 2rem;
+    font-weight: 600;
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+}
+
+.noApplications {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  width: 100%;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  background-color: var(--card-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.createButton {
+  background-color: var(--accent-color) !important;
+  color: var(--button-text) !important;
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+  box-shadow: 0 2px 4px var(--shadow-color) !important;
+
+  &:hover {
+    background-color: var(--accent-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px var(--shadow-color) !important;
+  }
+
+  :global(.MuiButton-startIcon) {
+    margin-right: 0.5rem;
+  }
+}
+
+.applicationList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.applicationCard {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+  }
+}
+
+.applicationHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+
+  h2 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 500;
+  }
+}
+
+.jobName {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+.applicationDetails {
+  color: var(--text-secondary);
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  strong {
+    color: var(--text-primary);
+    margin-right: 0.5rem;
+  }
+}
+
+.coverLetter {
+  margin-top: 1rem;
+
+  strong {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    white-space: pre-line;
+    line-height: 1.5;
+    margin: 0;
+    padding: 1rem;
+    background-color: var(--modal-input-bg);
+    border-radius: 6px;
+  }
+}
+
+.pagination {
+  margin-top: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding: 1rem 0;
+
+  button {
+    background-color: var(--button-secondary-bg);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: var(--button-secondary-hover);
+    }
+
+    &:disabled {
+      background-color: var(--button-disabled);
+      color: var(--text-disabled);
+      cursor: not-allowed;
+    }
+  }
+
+  span {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+}
