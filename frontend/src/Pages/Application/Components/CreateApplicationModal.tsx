@@ -253,25 +253,35 @@ const CreateApplicationModal: React.FC<CreateApplicationModalProps> = ({
             margin='normal'
           />
 
-          <FormControl
-            fullWidth
-            margin='normal'
-            error={touched.resume && !formData.resume}
+          <div
+            className={`${styles.fileUploadControl} ${
+              touched.resume && !formData.resume ? styles.error : ""
+            }`}
           >
-            <InputLabel shrink>Resume (PDF only, max 5MB)</InputLabel>
-            <Input
-              type='file'
-              onChange={handleFileUpload}
-              onBlur={() => handleBlur("resume")}
-              required
-              inputProps={{
-                accept: "application/pdf",
-              }}
-            />
-            {touched.resume && !formData.resume && (
-              <FormHelperText>Resume is required</FormHelperText>
-            )}
-          </FormControl>
+            <span className={styles.fileUploadLabel}>
+              Resume (PDF only, max 5MB)
+            </span>
+            <div className={styles.fileUploadWrapper}>
+              <span className={styles.fileNameDisplay}>
+                {formData.resume ? formData.resume.name : "No file chosen"}
+              </span>
+              <label className={styles.uploadButton}>
+                Choose File
+                <input
+                  type='file'
+                  onChange={handleFileUpload}
+                  onBlur={() => handleBlur("resume")}
+                  required
+                  accept='application/pdf'
+                />
+              </label>
+            </div>
+            <span className={styles.fileUploadHelper}>
+              {touched.resume && !formData.resume
+                ? "Resume is required"
+                : "Accepted format: PDF, Maximum size: 5MB"}
+            </span>
+          </div>
 
           <div className={styles.actions}>
             <Button onClick={onClose} disabled={isLoading}>
