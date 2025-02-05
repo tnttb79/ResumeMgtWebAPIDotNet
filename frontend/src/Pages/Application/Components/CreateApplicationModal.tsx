@@ -11,10 +11,6 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { get, post } from "../../../axiosConfig/axiosConfig";
-import {
-  CreateApplicationRequest,
-  CandidateResponse,
-} from "../../../types/application";
 import { Job } from "../../../types/job";
 import { useNotification } from "../../../context/NotificationContext";
 import styles from "./CreateApplicationModal.module.scss";
